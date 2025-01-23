@@ -1,0 +1,220 @@
+SELECT * from EMp   ---- Query  written in SQL language
+
+
+--- the Message tab appears when we run the query
+--- How to run the query ( select the query and then press f5 or just navigate the execute tab located 
+--above ribbon
+--- whenever we run the query and that query returns the output, a result tab with the output appears.
+--- SQL is not a case senstive language
+-- and not following any indentation rule
+
+SELECT   * from  EMP -- this query is used to get all records from a table
+
+--- Comments in SQL
+-- single line comment--- this is a single line comment ( you need to start your comment by placing two dashes(--)
+-- This is a single line comment
+/* backslash * ...comment * backslash 
+This
+is
+multiple
+line
+comment*/
+
+--- why SQL? 
+
+select EID, Name, Addr1, City, Phone, Email from Emp  /* EMP is a table name here
+
+-- let's understand the Process of Query in SQL
+-- After execution of Query
+--it goes to Query language Processor
+----in the Query language processor , the parser checks the correctness of the query
+---Correctness, Authorisation
+--Relational engine -- here it check the how to plan the retrieval execution
+--Database Engine-- Here in this stage it process the byte code and runs the SQL statement 
+
+     
+-- SQL Categorised in some categories
+
+-- DDL- Data Definition Language--- where we define the structure
+--- Create, Alter, Drop  
+
+--- Create a database*/
+
+create database Aug19th
+
+--- how to use or switch the database
+-- 1 way-- just go to above ribbon and from the dropdown change the DB name
+--2 way- type "USE DBNAME"
+
+use Aug19th
+
+--- Create a table
+
+create table Emp1
+(/* define the structure*/)
+
+--- how we are considering the structure of a table
+--- I want to create the columns ( EID, Name, Age, City, Email)
+-- the structure will be define by the type of Data ( Data types)
+
+--- Data Types--
+
+-- Numeric Data Types
+-- Int (-2147483648 till +2147483647), Bigint(-922337203685477 till its positive values
+--, Smallint ( -32768 till +32768), Tinyint (0-255)
+-- Float- -1.79E+308 to its positive value
+-- Money-- -922337203685477.5808 till its positive values
+-- Decimal-- -10^38+1 till its positive value ( you can control the decimal units)
+
+--- Character dtype--
+-- Char()- fixed type data type ( can hold any characters) - 8000 max
+-- Varchar()- variable character datatype ( can hold any characters) - 8000 max
+-- Text()- variable character datatype ( can hold any characters)  --  max 2147483648
+
+-- Diff in Char and varchar
+--- Char can be used where we know the data length is fixed ( E0001..E9999, S0001..S9999)
+--- varchar()- used for variable length (like Name, Cityname, pdesc, etc.)
+
+--Char(10)- SAGAR- 5 characters -- SAGAR_____-- the capped max limit with the Char dtype always reserve the
+-- space upto max limit, any available space will be assigned to space characters
+
+-- Varchar(10)- SAGAR- 5 chars -- it will use only the characters leng of the input
+
+--- char is faster than the varchar, it is good for Indexing
+
+--- Date Dtype---
+-- Date or Datetime - Jan 1 1753 till 31st Dec 9999
+--- Smalldate  Jan 1 1900 till June 6 2079
+
+---Nchar, Nvarchar, ntext    - N is here denotes the National Characters
+--- syntax-- Create Table Table_name(Col1 dtype(limit), Col2 dtype(limit)
+-- only Character dtype requires the capped limit
+-- in the numeric the decimal requires the range caping
+create table Emp1
+(EID char(5), Name varchar(50), Age int, city varchar(50),
+Salary Decimal(10,2 /* eg: 99999999.99*/), DOJ date)
+
+--- Let's say Email is also required in this structure
+-- let's modify the structure 
+-- Alter does different modification ( Add, Alter and Drop the existing part of a structure)
+--alter with add
+Alter table emp1
+add Email varchar(70)
+
+-- Age is not required in this table
+-- alter with drop
+Alter table emp1
+drop Column Age
+
+--- Increaing and decreasing the size of your column limit and changing the datatype of the column
+
+-- alter with alter
+alter table emp1
+alter column city varchar(80)
+
+--- Salary datatype change
+-- from Decimal to money
+alter table emp1
+alter column Salary money
+
+--- This table doesn't required
+
+--- will drop the table
+--- drop is the worst command , because you can't retrieve the structure back
+
+drop table emp1
+
+Alter table emp1
+drop Column Age,city
+
+
+
+--- how we are considering the structure of a table
+--- I want to create the columns ( EID, Name, Age, City, Email)
+
+--- DML- Data Manipulation Language-- this talks about the data creation, modification, deletion)
+--- Insert, Update, Delete, Truncate
+
+--- Insert the data into a table
+--- if insertion is for few columns then we need to provide the Columns name as parameter
+-- except numeric datatype all values will be consider as string and mentioned inside the 'single quotation)
+-- if the value is not provided then SQL fill that valuw with 'NULL'
+--- SQL undersatnd the Date datatype and stores inside the database as 'YYYY-MM-DD'
+--- if the values and columns are same as per the structure of a table then no need to provide the parameter
+-- one value insertion
+insert into emp1
+values('E0002','Neha Thapliyal',32,'Bangalaore',45900,'2023-05-11')
+
+--- Multiple value insertion with one insert statement
+--- we can define the set of values within the parenthesis seperated by the comma
+
+insert into emp1
+values('E0003','Pankaj Sharma',35,'Delhi',90000,'2022-05-14'),
+('E0004','Mohini Goel',34,'Delhi',96800,'2022-05-14'),
+('E0005','Rakhi Gupta',27,'Delhi',67000,'2022-07-14'),
+('E0006','Mohit Sharma',27,'Delhi',89000,'2023-08-14'),
+('E0007','Sumit Sharma',29,'Delhi',68000,'2024-05-14')
+
+select * from Emp1
+
+--- The salary of Sagar Thapliyal E0001 needs to update with 102400
+Update emp1 set Salary=102400
+--if we run this statement like this then it will update all salaries
+--- to update some particular row or record we need to provide the condition
+
+Update emp1 set Salary=102400
+where EID='E0001'
+
+--- The EId E0007 left the company so that record needs to delete from the emp table
+
+delete from emp1   --- this statement will delete all the records from the table
+where EID='E0007'
+
+--- delete in SQL runs row wise
+
+--- what if we need to delete the whole records in a table
+
+-- we have Truncate for this use where we need structure but no records
+
+select * from Emp1
+
+truncate table emp1
+
+--- Diff and similarities between Delete and Truncate
+--- Delete from tablename and Truncate Table Tablename- will delete all the records
+-- Delete will go row wise and truncate at once
+-- delete supports where condition ,truncate doesn't
+
+
+truncate table emp1
+where EID ='E0003'  /* it won't supports where clause*/
+
+
+delete from emp1
+where EID='E0003'  /* delete supports where clause*/
+
+--Delete is not the part of permanent deletion, when it defines with the Transaction ,
+---we can revert it back, but truncate is a permanent delete.
+
+---DQL- Data Query Language-- Select followed by Top, case when, from, where, group by, having, order by , fetch and offset
+-- which won't effect the data in any means ( like Structure and records)
+
+-- you can query the whole data or few data as per the requirement
+
+use demo
+
+select * from Emp  /* (*) denotes all columns*/
+
+select EID, Name, City, DOJ, Dob, Email from Emp -- for selective columns we can provide the names
+--seperated by the comma
+
+--- our query requirement could be based on some condition
+--- here comes the role of Where Clause to filter the data
+
+--- I want to see only Delhi employees details
+--- where clause comes after the Table name
+
+select * from Emp
+where City='Delhi'
+
+---
