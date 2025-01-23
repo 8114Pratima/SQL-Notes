@@ -1,0 +1,279 @@
+use demo
+
+-- DQL- Select
+
+Select * from emp
+where City='Delhi'
+
+--- Where clause is used to filter the data and used for putting a condition
+-- condition could be exact match, like City = Delhi
+
+--- What if this could City Started with letter 'D'
+-- What if The Name ended with Sharma
+-- What if Address has 'Sector' in the Addr1 columns
+
+
+Select * from emp
+where City='Delhi'
+
+--- here comes the role of Like operator along with the wildcards
+--- %, _, [], ^ -- wildcards
+-- it works with the like operator followed by where clause
+
+select * from emp
+where City like 'D%'  /* if pattern is in the beginning then write pattern and then enclosed with % sign'*/
+
+--- Note: The % wildcard denotes any character
+
+-- How many employees are there with the similar last name Sharma
+
+select * from Emp
+where Name like '%Sharma'  /* when we have pattern to be match at the end then use % wildcard first then Pattern*/
+-- find out the employees having email from yahoo domain 
+
+select * from Emp
+where Email like '%@yahoo%'  /* to check the pattern anywhere in the string then use %pattern%*/
+
+--- I need to check the Names where second character should be 'A'
+
+select * from emp
+where Name like '_A%'
+
+--- Third character should be 'M'
+
+select * from emp
+where Name like '__M%'
+
+-- second char 'A' and 5th Char 'S'
+
+select * from emp
+where Name like '_a__s%'
+
+--- we need to find out the Names starting with char 'A' and 'G'
+
+--- we have square bracket [] wildcard
+
+select * from emp
+where Name like '[AGN]%'
+
+-- if we have characters range -- find the names starting with ABCDE MNOPQRS ( it exclude FGHIJKLTUVWxYZ)
+-- range is A-E M-S
+
+select * from Emp
+where Name like '[A-EM-S]%'
+
+--- in the above pattern we don't need these ranges
+-- we use wildcard ^ caret to negate the condition
+select * from Emp
+where Name like '[^A-EM-S]%'
+
+--- here comes the role of Underscore (_) wildcard, which denotes the unknown character and shifting
+
+--- Fetching and limit the data
+
+--- data.head()-- 
+
+-- we have Top clause in SQL to fetch the provided number of rows
+--from the table as per the physical order by default
+
+select top 5 * from emp
+
+select * from emp
+
+--- I want to fetch then particular row index
+--- 5th row to 20th row
+
+-- how to sort the data ( ascending and descending order of the data as per the criteria)
+-- we have Order by clause for this
+-- order by clause always use at the end of the query
+-- order by clause can be use for derived column and physical column 
+select * from Emp
+order by Name asc/* asc is a default order no need to write the asc keyword explicitly*/
+
+--- to fetch the rows/data based on row_index
+-- we have fetch and offset
+--- to use fetch and offset we need to use order by clause 
+select * from emp
+order by name
+
+select * from emp
+order by Name 
+offset  4 rows  /* offet value= the starting rowindex-1  --- 5-1=4 (offset means skipping the rows*/
+fetch next 16 rows only          /* fetch value-- the nth row -offset value- 20-4=16*/
+
+-- start from 30th row and fetch till 58th row
+
+select * from emp
+order by Name 
+offset  29 rows  /* offet value= the starting rowindex-1  --- 30-1=29 (offset means skipping the rows*/
+fetch next 29 rows only    /* fetch value-- the nth row -offset value- 58-29=29*/
+
+
+select * from emp_sal
+
+--- we need to find the EID , DEPT, DEsi, salary for top 5 employees
+
+select top 5* from emp_sal
+order by salary desc
+
+--- fetch 5th highest salary to 11th highest salary details
+
+select * from emp_sal
+order by salary desc
+offset 4 rows
+fetch next 7 rows only
+
+---- SQL Operators--
+-- Arithmetic operators--- +, -, /, *, %
+--- Comparison Operators-- =, !=, <>, >, <,>=, <=
+-- Logical oeprators-- AND, Or, Not
+-- Other operators- Between, in, Like, Isnull, Distinct, Exists,isnumeric, isdate
+
+select 4*5 as 'Product', 4/2 as Divison, 5%2 remainder, 4+2 as 'addition', 10-5 as 'Subtraction'
+
+--- Giving name to calculation or derived column is called 'Alias'
+
+select * from Emp_sal
+
+--- Company decided that there will be 10000 rs increment for the Associate
+
+update emp_Sal set salary=Salary+10000
+where desi='Associate'
+
+--- there will be the calculation for EPF(12%) and HRA(17%)
+
+select EID, DEPT,DESI,SALary,salary *12/100 as 'EPF', salary*17/100 as 'HRA' from emp_sal
+
+alter table emp_sal
+add HRA money
+
+alter table emp_sal
+add EPF money
+
+update emp_sal set EPF=salary * 12/100
+
+select * from emp_sal
+
+update emp_sal set Dept='Admin'
+,Desi='Manager'
+where EID='E1001'
+
+-- Comparison operators
+
+select * from emp
+where City='Delhi'
+
+select * from emp
+where City!='Delhi'
+
+select * from emp
+where City<>'Delhi'
+
+--- salary greater than 100000
+
+select * from Emp_sal
+where Salary>100000
+
+--- HRA is lesser than 50000
+select * from Emp_sal
+where HRA<50000
+
+--- HRA lesser and equals to 41650
+select * from Emp_sal
+where HRA>=41650
+
+update emp_sal set HRA=salary * 17/100.00
+
+
+--- Logical operators
+-- AND-- it works with bolean result- of condition will be true then returns the output else not
+
+select * from Emp
+where City='Delhi' And Addr1 like '%Sector%'
+
+-- OR Operator-- either of the conditions needs to True
+select * from Emp
+where City='Delhi' or Addr1 like '%Sector%'
+
+--- not operator- condition not to be true
+select * from Emp
+where Addr1 not like '%Sector%'
+
+
+---Other operators
+
+-- Between- it works with a range
+
+-- find out the salary between the range of 143020 and 245000
+--- between operator includes both the values in the range 
+select * from Emp_Sal
+where Salary between 143020 and 245000
+
+select * from emp
+where Name between 'a' and 'g'
+
+--- Observe the result-- assignment
+
+--- In operator-- when we have multiple value to be search we use In operator
+
+--- Find out the Employee details for OPS, ADMIN, HR dept
+
+select * from Emp_sal
+where Dept in ('OPS','ADMIN','HR')
+
+--- checking Null values
+
+update emp_sal set Salary=Null
+where EID='E1006'
+
+select * from Emp_sal
+where Salary is null
+
+--- Group by clause, Having clause, Distinct
+
+-- Checking Distinct values in a column or table we use Dictinct clause
+
+select Distinct City from Emp
+
+select Distinct Dept from Emp_sal
+
+select Distinct * from Emp
+
+--- we need to find the count of employees in the data as per the cities
+--- the column used in select statement should be the part of Aggregation or Group by clause
+select * from Emp
+
+select City, Count(EId) as 'No_of_Emp' from Emp
+group by City
+
+select Dept,Count(EID) from emp_sal
+group by Dept
+
+select Dept,Desi, Count(EID) 'Count_desi_wise'from emp_sal
+group by Dept,Desi
+
+-- I want to filter the count and include only where count is more than 5
+
+--- Where is use to filter the base table data
+--- having is to filter the aggregated data, it always used with the group by clause
+
+select Dept,Desi, Count(EID) 'Count_desi_wise'from emp_sal
+group by Dept,Desi
+having count(EID)>=5
+
+
+Select * from Emp
+where City='Dehradun'
+
+Select * from Emp
+where City='Delhi'
+Select * from Emp
+where City='Chandigarh'
+Select * from Emp
+where City='Gurgaon'
+Select * from Emp
+where City='Pune'
+Select * from Emp
+where City='Noida'
+Select * from Emp
+where City='Mumbai'
